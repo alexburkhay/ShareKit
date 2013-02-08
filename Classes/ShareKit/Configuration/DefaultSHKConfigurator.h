@@ -97,4 +97,8 @@
 - (NSNumber*)allowAutoShare;
 - (NSNumber*)usePlaceholders;
 
+//SHKFacebook
+- (NSString *)facebookURLSharePictureURI;
+- (NSString *)facebookURLShareDescription;
+
 @end

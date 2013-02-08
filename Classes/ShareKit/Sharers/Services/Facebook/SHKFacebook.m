@@ -219,10 +219,17 @@ static NSString *const kSHKFacebookUserInfo =@"kSHKFacebookUserInfo";
 		NSString *url = [item.URL absoluteString];
 		[params setObject:url forKey:@"link"];
 		[params setObject:item.title == nil ? url : item.title
-				   forKey:@"name"];    
+				   forKey:@"name"];
+        
+        //message parameter is invalid in fbdialog since 2011. Next two lines are effective only when sending to graph API.
 		if (item.text)
 			[params setObject:item.text forKey:@"message"];
-		NSString *pictureURI = [item customValueForKey:@"picture"];
+        
+        NSString *description = self.item.facebookURLShareDescription;
+		if (description)
+			[params setObject:description forKey:@"description"];
+        
+		NSString *pictureURI = self.item.facebookURLSharePictureURI;
 		if (pictureURI)
 			[params setObject:pictureURI forKey:@"picture"];
 	}
@@ -386,7 +393,7 @@ static NSString *const kSHKFacebookUserInfo =@"kSHKFacebookUserInfo";
 {
     //if user revoked app permissions
     NSNumber *fbErrorCode = [[error.userInfo valueForKey:@"error"] valueForKey:@"code"];
-    if (error.domain == @"facebookErrDomain" && [fbErrorCode intValue] == 190) {
+    if ([error.domain localizedCaseInsensitiveCompare:@"facebookErrDomain"] == NSOrderedSame && [fbErrorCode intValue] == 190) {
         [self shouldReloginWithPendingAction:SHKPendingSend];
     } else {
         [self sendDidFailWithError:error];

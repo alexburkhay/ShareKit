@@ -53,7 +53,10 @@ typedef enum
 	NSData *data;
 	NSString *mimeType;
 	NSString *filename;
-	
+    
+    NSString *facebookURLSharePictureURI;
+    NSString *facebookURLShareDescription;
+    
 	@private
 		NSMutableDictionary *custom;
 }
@@ -83,5 +86,9 @@ typedef enum
 
 - (NSDictionary *)dictionaryRepresentation;
 + (id)itemFromDictionary:(NSDictionary *)dictionary;
+
+/* SHKFacebook */
+@property (nonatomic, retain) NSString *facebookURLSharePictureURI;
+@property (nonatomic, retain) NSString *facebookURLShareDescription;
 
 @end

@@ -88,6 +88,17 @@
     return [NSArray arrayWithObjects:@"publish_stream", @"offline_access", nil];
 }
 
+/* SHKFacebook */
+
+//when you share URL on Facebook, FBDialog scans the page and fills picture and description automagically by default. Use these item properties to set your own.
+- (NSString *)facebookURLSharePictureURI {
+    return nil;
+}
+
+- (NSString *)facebookURLShareDescription {
+    return nil;
+}
+
 // Read It Later - http://readitlaterlist.com/api/signup/ 
 - (NSString*)readItLaterKey {
 	return @"";

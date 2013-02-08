@@ -27,7 +27,7 @@
 
 #import "SHKItem.h"
 #import "SHK.h"
-
+#import "SHKConfiguration.h"
 
 @interface SHKItem()
 
@@ -42,6 +42,7 @@
 
 @synthesize shareType;
 @synthesize URL, image, title, text, tags, data, mimeType, filename;
+@synthesize facebookURLSharePictureURI, facebookURLShareDescription;
 @synthesize custom;
 
 - (void)dealloc
@@ -59,10 +60,29 @@
 	[filename release];
 	
 	[custom release];
-	
+    
+	[facebookURLSharePictureURI release];
+    [facebookURLShareDescription release];
+    
 	[super dealloc];
 }
 
+- (id)init {
+    
+    self = [super init];
+    
+    if (self) {
+        
+        [self setExtensionPropertiesDefaultValues];
+    }
+    return self;
+}
+
+- (void)setExtensionPropertiesDefaultValues {
+    
+    facebookURLShareDescription = [SHKCONFIG(facebookURLShareDescription) retain];
+    facebookURLSharePictureURI = [SHKCONFIG(facebookURLSharePictureURI) retain];
+}
 
 + (id)URL:(NSURL *)url
 {
@@ -165,6 +185,12 @@
 
 	if ([dictionary objectForKey:@"image"] != nil)
 		item.image = [UIImage imageWithData:[dictionary objectForKey:@"image"]];
+    
+    if ([dictionary objectForKey:@"facebookURLShareDescription"] != nil)
+		item.facebookURLShareDescription = [dictionary objectForKey:@"facebookURLShareDescription"];
+    
+    if ([dictionary objectForKey:@"facebookURLSharePictureURI"] != nil)
+		item.facebookURLSharePictureURI = [dictionary objectForKey:@"facebookURLSharePictureURI"];
 
 	return [item autorelease];
 }
@@ -203,7 +229,14 @@
 		[dictionary setObject:UIImagePNGRepresentation(image) forKey:@"image"];
 	
 	// If you add anymore, make sure to add a method for retrieving them to the itemWithDictionary function too
-	
+    if (facebookURLSharePictureURI) {
+		[dictionary setObject:facebookURLSharePictureURI forKey:@"facebookURLSharePictureURI"];
+	}
+    
+	if (facebookURLShareDescription) {
+		[dictionary setObject:facebookURLShareDescription forKey:@"facebookURLShareDescription"];
+	}
+
 	return dictionary;
 }
 
