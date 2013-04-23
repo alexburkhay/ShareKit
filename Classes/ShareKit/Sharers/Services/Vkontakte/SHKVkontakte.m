@@ -241,6 +241,7 @@
 	
 	NSString *hash = [postDictionary objectForKey:@"hash"];
 	NSString *photo = [postDictionary objectForKey:@"photo"];
+    photo = [photo stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	NSString *server = [postDictionary objectForKey:@"server"];
 
 	NSString *saveWallPhoto = [NSString stringWithFormat:@"https://api.vk.com/method/photos.saveWallPhoto?owner_id=%@&access_token=%@&server=%@&photo=%@&hash=%@", self.accessUserId, self.accessToken ,server, photo, hash];
@@ -351,12 +352,11 @@
 
 		reqURl = [reqURl stringByAppendingFormat:@"&captcha_sid=%@&captcha_key=%@", captcha_sid, [self URLEncodedString: captcha_user]];
 	}
-	NSMutableURLRequest *requestM = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:reqURl] 
-																												 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
-																										 timeoutInterval:60.0]; 
-	
+	NSMutableURLRequest *requestM = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:reqURl]
+                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                        timeoutInterval:60.0];
 	NSData *responseData = [NSURLConnection sendSynchronousRequest:requestM returningResponse:nil error:nil];
-	
+    
 	if(responseData){
 		NSDictionary *dict = [[JSONDecoder decoder] parseJSONData:responseData];
 		
